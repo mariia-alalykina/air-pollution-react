@@ -248,7 +248,56 @@ export default class App extends React.Component {
               }
           })
 
-          
+          map.on('idle', () => {
+              if(!map.getLayer('co') || !map.getLayer('h2s') || !map.getLayer('no2') || !map.getLayer('so2')) {
+                  return;
+              }
+              const toggleableLayerIds = ['co', 'h2s', 'no2', 'so2'];
+              for (let id of toggleableLayerIds) {
+                  if(document.getElementById(id)) {
+                      continue;
+                  }
+
+                  const link = document.createElement('a');
+                  link.id = id;
+                  link.href = '#';
+                  link.textContent = id;
+
+                  link.onclick = function(e) {
+                      const clickedLayer = this.textContent;
+                      e.preventDefault();
+                      e.stopPropagation();
+  
+                      const visibility = map.getLayoutProperty(
+                          clickedLayer,
+                          'visibility'
+                      );
+
+                      for(let id_ of toggleableLayerIds) {
+                          if (id_ !== clickedLayer) {
+                              console.log(id_);
+                              map.setLayoutProperty(id_, 'visibility', 'none');
+                              document.getElementById(id_).className = '';
+                          }
+                      }
+  
+                      if (visibility === 'visible') {
+                          map.setLayoutProperty(clickedLayer, 'visibility', 'none');
+                          this.className = '';
+                      } else {
+                          this.className = 'active';
+                          map.setLayoutProperty(
+                          clickedLayer,
+                          'visibility',
+                          'visible'
+                          );
+                      }
+                  };
+
+                  const layers = document.getElementById('switcher');
+                  layers.appendChild(link);
+              }
+          });
       });
     }
 
