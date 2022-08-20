@@ -23,6 +23,10 @@ export default class App extends React.Component {
             center: [lng, lat],
             zoom: zoom
         });
+
+        map.addControl(new mapboxgl.FullscreenControl());
+        map.addControl(new mapboxgl.NavigationControl());
+        map.addControl(new mapboxgl.GeolocateControl());  
     }
 
     render() {
