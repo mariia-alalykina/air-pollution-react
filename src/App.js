@@ -1,25 +1,35 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+import mapboxgl from '!mapbox-gl'; // eslint-disable-line import/no-webpack-loader-syntax
 
-export default App;
+mapboxgl.accessToken = 'pk.eyJ1IjoibGFtYWhhIiwiYSI6ImNsNTB1Y3kybjA5bGozZXBkZHcycmg5MjgifQ.TmKOtL10kavuCH5s2p-T2Q';
+
+export default class App extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            lng: 33.3,
+            lat: 47.8,
+            zoom: 9
+        };
+        this.mapContainer = React.createRef();
+    }
+
+    componentDidMount() {
+        const { lng, lat, zoom } = this.state;
+        const map = new mapboxgl.Map({
+            container: this.mapContainer.current,
+            style: 'mapbox://styles/mapbox/streets-v11',
+            center: [lng, lat],
+            zoom: zoom
+        });
+    }
+
+    render() {
+        return (
+            <div>
+            <div ref={this.mapContainer} className="map-container" />
+            </div>
+        );
+    }
+} 
